@@ -1,0 +1,17 @@
+http		/usr/lib/nagios/plugins/check_http -H %HOST%
+https		/usr/lib/nagios/plugins/check_http -H %HOST% -S -p 443
+https_cert	/usr/lib/nagios/plugins/check_http -H %HOST% -S -p 443 -C 20,10
+ping_slow	/usr/lib/nagios/plugins/check_ping -H %HOST% -4 -w 200,25% -c 300,50%
+ping4		/usr/lib/nagios/plugins/check_ping -H %HOST% -4 -w 100,10% -c 200,20%
+ping6		/usr/lib/nagios/plugins/check_ping -H %HOST% -6 -w 100,10% -c 200,20%
+
+[host1.example.com]
+http
+https
+https_cert
+ping_slow
+
+[host2.example.com]
+ping4
+ping6
+dns		/usr/lib/nagios/plugins/check_dns -s 127.0.0.1 -H www.google.com
