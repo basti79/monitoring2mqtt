@@ -43,7 +43,7 @@ while (<IN>) {
 	if ($res{'raw'} =~ /\|/) {
 		$res{'out'} = $`;
 		my @perf = Nagios::Plugin::Performance->parse_perfstring($');
-		my @metrics = ();
+		my %metrics;
 		for my $p (@perf) {
 			my %metric_hash = (
 			    'label'    => $p->label,
@@ -54,9 +54,9 @@ while (<IN>) {
 			    'min'      => $p->min,
 			    'max'      => $p->max
 			);
-			push(@metrics, \%metric_hash);
+			$metrics{$p->label} = \%metric_hash;
 		}
-		$res{'metrics'} = \@metrics;
+		$res{'metrics'} = \%metrics;
 	} else {
 		$res{'out'} = $res{'raw'};
 	}
