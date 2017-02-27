@@ -1,15 +1,18 @@
 #!/usr/bin/perl -w -I.
 
 use strict;
+use Fcntl qw(:flock);
 use Nagios::Plugin::Performance;
 use JSON;
 use Net::MQTT::Simple "localhost";
 
+my $fh;
 my $host = '';
 my %checks;
 
-open(IN, "<monitoring2mqtt.conf") || die "Can't read from config file.";
-while (<IN>) {
+open($fh, "<monitoring2mqtt.conf") || die "Can't read from config file.";
+flock($fh, LOCK_EX|LOCK_NB) || die "Unable to lock file $!";
+while (<$fh>) {
 	next if /^\s*$/;
 	if (/^\s*\[(.*)\]\s*$/) {
 		$host = $1;
@@ -63,4 +66,4 @@ while (<IN>) {
 	$res{'last'} = time();
 	publish "/host/$host/$check" => encode_json(\%res);
 }
-close(IN);
+close($fh);

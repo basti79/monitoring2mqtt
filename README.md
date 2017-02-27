@@ -13,4 +13,3 @@ Copy monitoring2mqtt.conf.example to monitoring2mqtt.conf and edit. The rules ar
 
 The checks are currently executed one after another and the results are published into the MQTT broker running on localhost.
 
-There is curently no lock file, so be careful when running this via cron.
